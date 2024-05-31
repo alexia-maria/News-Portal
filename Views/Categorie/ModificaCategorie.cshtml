@@ -1,0 +1,22 @@
+﻿@model CategorieModel
+@{
+    ViewData["Title"] = "Modifica Categorie";
+}
+
+
+<div class="container">
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="Nume" class="control-label">Nume</label>
+            <input asp-for="Nume" class="form-control" />
+            <span asp-validation-for="Nume" class="text-danger"></span>
+        </div>
+
+        <input type="hidden" asp-for="Id" />
+
+        <br />
+        <input type="submit" value="Editeaza" class="btn btn-primary" />
+    </form>
+</div>

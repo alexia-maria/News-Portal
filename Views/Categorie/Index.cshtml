@@ -1,0 +1,38 @@
+﻿@model List<CategorieModel>
+
+@{
+    List<CategorieModel> categorii = Model;
+    ViewData["Title"] = "Index Categorii";
+   // String userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
+}
+
+<h1 class="text-center my-4">Stiri</h1>
+
+<div class="container">
+    <div class="row">
+        @foreach (CategorieModel categorie in categorii)
+        {
+            <p class="card-text">@categorie.Id</p>
+            <p class="card-text">@categorie.Nume</p>
+            <a asp-controller="Categorie" asp-action="ModificaCategorie" asp-route-categorieId="@categorie.Id" class="btn btn-primary btn-sm">Modifica Categorie</a>
+        }
+    </div>
+
+    <div class="container">
+        <div class="row">
+            @foreach (var categorie in categorii)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">@categorie.Nume</h5>
+                            <a asp-controller="Categorie" asp-action="StiriInCategorie" asp-route-categorieId="@categorie.Id" class="btn btn-primary">Vezi Știri</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    <div class="text-center my-4">
+        <a asp-action="AdaugaCategorie" class="btn btn-success btn-lg">Adauga Categorie</a>
+    </div>
+</div>

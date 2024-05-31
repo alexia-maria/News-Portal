@@ -1,0 +1,45 @@
+﻿@model List<StireModel>
+
+@{
+    List<StireModel> stiri = Model;
+    ViewData["Title"] = "Portal Stiri Lab07";
+    String userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
+}
+
+<h1 class="text-center my-4">Stiri</h1>
+
+<div class="container">
+    <div class="row">
+        @foreach (StireModel stire in stiri)
+        {
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h2 class="card-title">
+                            <a asp-controller="Stire" asp-action="Stire" asp-route-stireId="@stire.Id">@stire.Titlu</a>
+                        </h2>
+                        <p class="card-text">@stire.Lead</p>
+                    </div>
+                    @if (userRole.ToLower() == "moderator")
+                    {
+                        <div class="card-footer">
+                            <div class="d-flex justify-content-between">
+                                <a asp-controller="Stire" asp-action="ModificaStire" asp-route-stireId="@stire.Id" class="btn btn-primary btn-sm">Modifica Stire</a>
+                                <a asp-controller="Stire" asp-action="StergeStire" asp-route-stireId="@stire.Id" class="btn btn-danger btn-sm">Sterge Stire</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+    @if (userRole.ToLower() == "moderator")
+    {
+        <div class="text-center my-4">
+            <a asp-action="AdaugaStire" class="btn btn-success btn-lg">Adauga Stire</a>
+        </div>
+    }
+</div>
+
+
+

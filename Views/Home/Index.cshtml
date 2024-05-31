@@ -1,0 +1,29 @@
+﻿@{
+    List<StireModel> stiri = Model;
+    ViewData["Title"] = "Home Page";
+}
+
+<h2>Stiri Recente</h2>
+
+@if (stiri != null && stiri.Count > 0)
+{
+    <ul class="list-unstyled">
+        @foreach (var stire in stiri)
+        {
+            <li class="mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">@stire.Titlu</h3>
+                        <h6 class="card-text">@stire.Lead</h6>
+                        <p class="card-subtitle mb-2 text-muted">Publicat de @stire.Autor la @stire.Data in categoria @stire.Categorie!.Nume</p>
+                        <p class="card-subtitle mb-2 text-muted">@stire.Continut</p>
+                    </div>
+                </div>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Nu există știri recente disponibile.</p>
+}

@@ -1,0 +1,50 @@
+﻿
+@model List<StireModel>
+
+@{
+    List<StireModel> stiri = Model;
+    ViewData["Title"] = "Știri în Categorie";
+    int categorieId = ViewBag.CategorieId as int? ?? 0;
+}
+
+
+
+<h1 class="text-center my-4">Știri în Categoria: @ViewBag.CategorieNume</h1>
+
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-12 text-center">
+            <form method="get" asp-controller="Categorie" asp-action="StiriInCategorie" class="d-inline">
+                <input type="hidden" name="categorieId" value="@categorieId" />
+                <input type="hidden" name="sortare" value="titlu" />
+                <button type="submit" class="btn btn-primary">Sortare Alfabetică</button>
+            </form>
+            <form method="get" asp-controller="Categorie" asp-action="StiriInCategorie" class="d-inline">
+                <input type="hidden" name="categorieId" value="@categorieId" />
+                <input type="hidden" name="sortare" value="data" />
+                <button type="submit" class="btn btn-primary">Sortare după Data Publicării</button>
+            </form>
+            <form method="get" asp-controller="Categorie" asp-action="StiriInCategorie" class="d-inline">
+                <input type="hidden" name="categorieId" value="@categorieId" />
+                <input type="hidden" name="sortare" value="continut" />
+                <button type="submit" class="btn btn-primary">Sortare după Dimensiunea Conținutului</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        @foreach (var stire in Model)
+        {
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">@stire.Titlu</h5>
+                        <p class="card-text">@stire.Lead</p>
+                        <a asp-controller="Stire" asp-action="Stire" asp-route-stireId="@stire.Id">Citeste mai mult</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
