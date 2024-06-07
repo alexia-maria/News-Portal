@@ -30,13 +30,29 @@ public class StireController : Controller
     [HttpGet]
     public IActionResult Stire(int stireId)
     {
-        StireCurenta = _context.Stiri.Where(stire => stire.Id == stireId).Include(stire => stire.Categorie).FirstOrDefault();
+        /*
+        StireCurenta = _context.Stiri.Where(stire => stire.Id == stireId).Include(stire => stire.Categorie).Include(comentariu => stire.Comentarii).FirstOrDefault();
         if(StireCurenta == null)
         {
             return RedirectToAction("Error", "Home");
         }
         return View(StireCurenta);
-        
+        */
+
+        StireCurenta  = _context.Stiri.Where(stire => stire.Id == stireId).Include(stire => stire.Categorie).FirstOrDefault();
+
+        if (StireCurenta == null)
+        {
+            return RedirectToAction("Error", "Home");
+        }
+
+        List<ComentariuModel> comentarii = _context.Comentarii
+            .Where(comentariu => comentariu.StireId == stireId)
+            .ToList();
+
+        ViewBag.Comentarii = comentarii;
+
+        return View(StireCurenta);
     }
 
     [HttpGet]
@@ -114,4 +130,22 @@ public class StireController : Controller
         _context.SaveChanges();
         return RedirectToAction("Index");
     }
+
+    [HttpPost]
+    public IActionResult AdaugaComentariu(int stireId, string autor, string continut)
+    {
+        var comentariu = new ComentariuModel
+        {
+            StireId = stireId,
+            Autor = autor,
+            Continut = continut,
+            Data = DateTime.Now
+        };
+
+        _context.Comentarii.Add(comentariu);
+        _context.SaveChanges();
+
+        return RedirectToAction("Stire", new { stireId = stireId });
+    }
+
 }

@@ -4,6 +4,7 @@ using LAB7_WEB.ContextModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LAB7_WEB.Migrations
 {
     [DbContext(typeof(StiriContext))]
-    partial class StiriContextModelSnapshot : ModelSnapshot
+    [Migration("20240605154144_mi")]
+    partial class mi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,9 +64,12 @@ namespace LAB7_WEB.Migrations
                     b.Property<int>("StireId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("StireModelId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("StireId");
+                    b.HasIndex("StireModelId");
 
                     b.ToTable("Comentarii");
                 });
@@ -132,13 +138,9 @@ namespace LAB7_WEB.Migrations
 
             modelBuilder.Entity("LAB7_WEB.Models.ComentariuModel", b =>
                 {
-                    b.HasOne("LAB7_WEB.Models.StireModel", "Stire")
-                        .WithMany()
-                        .HasForeignKey("StireId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Stire");
+                    b.HasOne("LAB7_WEB.Models.StireModel", null)
+                        .WithMany("Comentarii")
+                        .HasForeignKey("StireModelId");
                 });
 
             modelBuilder.Entity("LAB7_WEB.Models.StireModel", b =>
@@ -150,6 +152,11 @@ namespace LAB7_WEB.Migrations
                         .IsRequired();
 
                     b.Navigation("Categorie");
+                });
+
+            modelBuilder.Entity("LAB7_WEB.Models.StireModel", b =>
+                {
+                    b.Navigation("Comentarii");
                 });
 #pragma warning restore 612, 618
         }

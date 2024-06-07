@@ -3,36 +3,35 @@
 @{
     List<CategorieModel> categorii = Model;
     ViewData["Title"] = "Index Categorii";
-   // String userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
+    String userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
 }
 
-<h1 class="text-center my-4">Stiri</h1>
+<h1 class="text-center my-4">Categorii</h1>
 
 <div class="container">
     <div class="row">
         @foreach (CategorieModel categorie in categorii)
         {
-            <p class="card-text">@categorie.Id</p>
-            <p class="card-text">@categorie.Nume</p>
-            <a asp-controller="Categorie" asp-action="ModificaCategorie" asp-route-categorieId="@categorie.Id" class="btn btn-primary btn-sm">Modifica Categorie</a>
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">@categorie.Nume</h5>
+                        <a asp-controller="Categorie" asp-action="StiriInCategorie" asp-route-categorieId="@categorie.Id" class="btn btn-primary btn-block mb-2" style="border-radius: 50px;">Vezi Știri</a>
+                        @if (userRole.ToLower() == "moderator")
+                        {
+                            <a asp-controller="Categorie" asp-action="ModificaCategorie" asp-route-categorieId="@categorie.Id" class="btn btn-secondary btn-block" style="border-radius: 50px;">Modifica Categorie</a>
+                        }
+                    </div>
+                </div>
+            </div>
         }
     </div>
 
-    <div class="container">
-        <div class="row">
-            @foreach (var categorie in categorii)
-            {
-                <div class="col-md-4">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <h5 class="card-title">@categorie.Nume</h5>
-                            <a asp-controller="Categorie" asp-action="StiriInCategorie" asp-route-categorieId="@categorie.Id" class="btn btn-primary">Vezi Știri</a>
-                        </div>
-                    </div>
-                </div>
-            }
+    @if (userRole.ToLower() == "moderator")
+    {
+        <div class="text-center my-4">
+            <a asp-action="AdaugaCategorie" class="btn btn-success btn-lg" style="border-radius: 50px; padding: 10px 30px;">Adauga Categorie</a>
         </div>
-    <div class="text-center my-4">
-        <a asp-action="AdaugaCategorie" class="btn btn-success btn-lg">Adauga Categorie</a>
-    </div>
+    }
 </div>
+

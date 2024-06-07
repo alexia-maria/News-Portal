@@ -2,7 +2,7 @@
 
 @{
     List<StireModel> stiri = Model;
-    ViewData["Title"] = "Portal Stiri Lab07";
+    ViewData["Title"] = "Portal Stiri";
     String userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
 }
 
@@ -40,6 +40,7 @@
         </div>
     }
 </div>
+
 
 
 

@@ -3,14 +3,61 @@
 @{
     StireModel stire = Model;
     ViewData["Title"] = stire.Titlu;
+    List<ComentariuModel> comentarii = ViewBag.Comentarii;
+    String userRole = User?.Claims?.FirstOrDefault(claim => claim.Type == "Role")?.Value ?? "";
 }
 
-<h1>Titlu: @stire.Titlu</h1>
+<div class="container my-4">
+    <h1 class="text-center">@stire.Titlu</h1>
 
-<article>
-    <h2>Lead: @stire.Lead</h2>
-    <p>Adaugat de @stire.Autor la data de @stire.Data in categoria @stire.Categorie!.Nume</p>
-    <p>@stire.Continut</p>
-</article>
+    <article class="my-4 p-4 bg-light border rounded">
+        <h2 class="text-primary">Lead: @stire.Lead</h2>
+        <p class="text-muted">Adaugat de <strong>@stire.Autor</strong> la data de <strong>@stire.Data</strong> in categoria <strong>@stire.Categorie!.Nume</strong></p>
+        <p class="mt-3">@stire.Continut</p>
+    </article>
 
-<a asp-controller="Home" asp-action="Index">Reintoarcere la pagina principala</a>
+    <section class="my-4">
+        <h3 class="text-secondary">Comentarii:</h3>
+        @if (comentarii != null && comentarii.Any())
+        {
+            <div class="list-group">
+                @foreach (var comentariu in comentarii)
+                {
+                    <div class="list-group-item">
+                        <p><strong>@comentariu.Autor</strong> a scris la <span class="text-muted">@comentariu.Data</span>:</p>
+                        <p>@comentariu.Continut</p>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p class="text-warning">Nu exista comentarii.</p>
+        }
+    </section>
+
+    @if (userRole.ToLower() == "loggeduser")
+    {
+        <div class="alert alert-info">@userRole</div>
+        <section class="my-4">
+            <h3 class="text-secondary">Adauga un comentariu:</h3>
+            <form asp-action="AdaugaComentariu" method="post" class="bg-light p-4 border rounded">
+                <input type="hidden" name="stireId" value="@Model.Id" />
+                <div class="form-group">
+                    <label for="autor">Autor:</label>
+                    <input type="text" id="autor" name="autor" class="form-control" required />
+                </div>
+                <div class="form-group mt-3">
+                    <label for="continut">Continut:</label>
+                    <textarea id="continut" name="continut" class="form-control" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Adauga</button>
+            </form>
+        </section>
+    }
+
+    <div class="text-center mt-4">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Reintoarcere la pagina principala</a>
+    </div>
+</div>
+
